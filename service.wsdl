@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ContactAddressService"
+    targetNamespace="http://localhost/soap_api/"
+    xmlns:tns="http://localhost/soap_api/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+    <types>
+        <xsd:schema targetNamespace="http://localhost/soap_api/">
+            <!-- Contact Types -->
+            <xsd:complexType name="Contact">
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:integer"/>
+                    <xsd:element name="first_name" type="xsd:string"/>
+                    <xsd:element name="last_name" type="xsd:string"/>
+                    <xsd:element name="email" type="xsd:string"/>
+                    <xsd:element name="phone" type="xsd:string"/>
+                    <xsd:element name="user_id" type="xsd:integer"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- Address Types -->
+            <xsd:complexType name="Address">
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:integer"/>
+                    <xsd:element name="street" type="xsd:string"/>
+                    <xsd:element name="city" type="xsd:string"/>
+                    <xsd:element name="province" type="xsd:string"/>
+                    <xsd:element name="country" type="xsd:string"/>
+                    <xsd:element name="postal_code" type="xsd:string"/>
+                    <xsd:element name="contact_id" type="xsd:integer"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+
+    <!-- Messages -->
+    <message name="getContactRequest">
+        <part name="id" type="xsd:integer"/>
+    </message>
+    <message name="getContactResponse">
+        <part name="return" type="tns:Contact"/>
+    </message>
+    <message name="createContactRequest">
+        <part name="firstName" type="xsd:string"/>
+        <part name="lastName" type="xsd:string"/>
+        <part name="email" type="xsd:string"/>
+        <part name="phone" type="xsd:string"/>
+        <part name="userId" type="xsd:integer"/>
+    </message>
+    <message name="createContactResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+
+    <message name="getAddressRequest">
+        <part name="id" type="xsd:integer"/>
+    </message>
+    <message name="getAddressResponse">
+        <part name="return" type="tns:Address"/>
+    </message>
+    <message name="createAddressRequest">
+        <part name="street" type="xsd:string"/>
+        <part name="city" type="xsd:string"/>
+        <part name="province" type="xsd:string"/>
+        <part name="country" type="xsd:string"/>
+        <part name="postalCode" type="xsd:string"/>
+        <part name="contactId" type="xsd:integer"/>
+    </message>
+    <message name="createAddressResponse">
+        <part name="return" type="xsd:boolean"/>
+    </message>
+
+    <!-- Port Type -->
+    <portType name="ContactAddressServicePortType">
+        <operation name="getContact">
+            <input message="tns:getContactRequest"/>
+            <output message="tns:getContactResponse"/>
+        </operation>
+        <operation name="createContact">
+            <input message="tns:createContactRequest"/>
+            <output message="tns:createContactResponse"/>
+        </operation>
+        <operation name="getAddress">
+            <input message="tns:getAddressRequest"/>
+            <output message="tns:getAddressResponse"/>
+        </operation>
+        <operation name="createAddress">
+            <input message="tns:createAddressRequest"/>
+            <output message="tns:createAddressResponse"/>
+        </operation>
+    </portType>
+
+    <!-- Binding -->
+    <binding name="ContactAddressServiceBinding" type="tns:ContactAddressServicePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="getContact">
+            <soap:operation soapAction="getContact"/>
+            <input>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="createContact">
+            <soap:operation soapAction="createContact"/>
+            <input>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="getAddress">
+            <soap:operation soapAction="getAddress"/>
+            <input>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="createAddress">
+            <soap:operation soapAction="createAddress"/>
+            <input>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="http://localhost/soap_api/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!-- Service -->
+    <service name="ContactAddressService">
+        <port name="ContactAddressServicePort" binding="tns:ContactAddressServiceBinding">
+            <soap:address location="http://localhost/soap_api/server.php"/>
+        </port>
+    </service>
+
+</definitions> 

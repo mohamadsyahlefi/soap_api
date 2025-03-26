@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api-documentation>
+    <service name="ContactAddressService">
+        <description>
+            Service untuk mengelola data Contact dan Address menggunakan SOAP
+        </description>
+        <base-url>http://localhost/soap_api/server.php</base-url>
+        <wsdl-url>http://localhost/soap_api/service.wsdl</wsdl-url>
+
+        <!-- Contact Service -->
+        <endpoint name="Contact">
+            <method name="createContact">
+                <description>Membuat data contact baru</description>
+                <request-type>POST</request-type>
+                <parameters>
+                    <parameter name="firstName" type="string" required="true">
+                        <description>Nama depan contact</description>
+                    </parameter>
+                    <parameter name="lastName" type="string" required="true">
+                        <description>Nama belakang contact</description>
+                    </parameter>
+                    <parameter name="email" type="string" required="true">
+                        <description>Alamat email contact</description>
+                    </parameter>
+                    <parameter name="phone" type="string" required="true">
+                        <description>Nomor telepon contact</description>
+                    </parameter>
+                    <parameter name="userId" type="integer" required="true">
+                        <description>ID user yang memiliki contact</description>
+                    </parameter>
+                </parameters>
+                <response>
+                    <success type="boolean">
+                        <description>true jika berhasil, false jika gagal</description>
+                    </success>
+                    <example>
+                        <![CDATA[
+                        $client->createContact(
+                            'John',          // firstName
+                            'Doe',           // lastName
+                            'john@example.com', // email
+                            '1234567890',    // phone
+                            1               // userId
+                        );
+                        ]]>
+                    </example>
+                </response>
+            </method>
+
+            <method name="getContact">
+                <description>Mengambil data contact berdasarkan ID</description>
+                <request-type>GET</request-type>
+                <parameters>
+                    <parameter name="id" type="integer" required="true">
+                        <description>ID contact yang akan diambil</description>
+                    </parameter>
+                </parameters>
+                <response>
+                    <success type="object">
+                        <field name="id" type="integer">ID contact</field>
+                        <field name="first_name" type="string">Nama depan</field>
+                        <field name="last_name" type="string">Nama belakang</field>
+                        <field name="email" type="string">Email</field>
+                        <field name="phone" type="string">Nomor telepon</field>
+                        <field name="user_id" type="integer">ID user</field>
+                        <field name="created_at" type="timestamp">Waktu pembuatan</field>
+                        <field name="updated_at" type="timestamp">Waktu update terakhir</field>
+                    </success>
+                    <example>
+                        <![CDATA[
+                        $contact = $client->getContact(1);  // id
+                        ]]>
+                    </example>
+                </response>
+            </method>
+        </endpoint>
+
+        <!-- Address Service -->
+        <endpoint name="Address">
+            <method name="createAddress">
+                <description>Membuat data alamat baru</description>
+                <request-type>POST</request-type>
+                <parameters>
+                    <parameter name="street" type="string" required="true">
+                        <description>Nama jalan</description>
+                    </parameter>
+                    <parameter name="city" type="string" required="true">
+                        <description>Nama kota</description>
+                    </parameter>
+                    <parameter name="province" type="string" required="true">
+                        <description>Nama provinsi</description>
+                    </parameter>
+                    <parameter name="country" type="string" required="true">
+                        <description>Nama negara</description>
+                    </parameter>
+                    <parameter name="postalCode" type="string" required="true">
+                        <description>Kode pos</description>
+                    </parameter>
+                    <parameter name="contactId" type="integer" required="true">
+                        <description>ID contact yang memiliki alamat</description>
+                    </parameter>
+                </parameters>
+                <response>
+                    <success type="boolean">
+                        <description>true jika berhasil, false jika gagal</description>
+                    </success>
+                    <example>
+                        <![CDATA[
+                        $result = $client->createAddress(
+                            '123 Main St',   // street
+                            'City',          // city
+                            'Province',      // province
+                            'Country',       // country
+                            '12345',        // postalCode
+                            1               // contactId
+                        );
+                        ]]>
+                    </example>
+                </response>
+            </method>
+
+            <method name="getAddress">
+                <description>Mengambil data alamat berdasarkan ID</description>
+                <request-type>GET</request-type>
+                <parameters>
+                    <parameter name="id" type="integer" required="true">
+                        <description>ID alamat yang akan diambil</description>
+                    </parameter>
+                </parameters>
+                <response>
+                    <success type="object">
+                        <field name="id" type="integer">ID alamat</field>
+                        <field name="street" type="string">Nama jalan</field>
+                        <field name="city" type="string">Nama kota</field>
+                        <field name="province" type="string">Nama provinsi</field>
+                        <field name="country" type="string">Nama negara</field>
+                        <field name="postal_code" type="string">Kode pos</field>
+                        <field name="contact_id" type="integer">ID contact</field>
+                        <field name="created_at" type="timestamp">Waktu pembuatan</field>
+                        <field name="updated_at" type="timestamp">Waktu update terakhir</field>
+                    </success>
+                    <example>
+                        <![CDATA[
+                        $address = $client->getAddress(1);  // id
+                        ]]>
+                    </example>
+                </response>
+            </method>
+        </endpoint>
+
+        <error-responses>
+            <error code="SOAP-ERROR">
+                <description>Error yang terjadi pada SOAP request</description>
+                <possible-causes>
+                    <cause>Parameter tidak sesuai dengan yang diharapkan</cause>
+                    <cause>Koneksi database gagal</cause>
+                    <cause>Foreign key constraint gagal</cause>
+                    <cause>Data tidak ditemukan</cause>
+                </possible-causes>
+            </error>
+            <error code="PDOException">
+                <description>Error yang terjadi pada database</description>
+                <possible-causes>
+                    <cause>Table tidak ditemukan</cause>
+                    <cause>Query SQL tidak valid</cause>
+                    <cause>Koneksi database terputus</cause>
+                </possible-causes>
+            </error>
+        </error-responses>
+
+        <database-schema>
+            <table name="contacts">
+                <field name="id" type="BIGINT UNSIGNED" auto-increment="true" primary-key="true"/>
+                <field name="first_name" type="VARCHAR(100)"/>
+                <field name="last_name" type="VARCHAR(100)"/>
+                <field name="email" type="VARCHAR(200)"/>
+                <field name="phone" type="VARCHAR(20)"/>
+                <field name="user_id" type="BIGINT UNSIGNED" foreign-key="users.id"/>
+                <field name="created_at" type="TIMESTAMP"/>
+                <field name="updated_at" type="TIMESTAMP"/>
+            </table>
+            <table name="addresses">
+                <field name="id" type="BIGINT UNSIGNED" auto-increment="true" primary-key="true"/>
+                <field name="street" type="VARCHAR(200)"/>
+                <field name="city" type="VARCHAR(100)"/>
+                <field name="province" type="VARCHAR(100)"/>
+                <field name="country" type="VARCHAR(100)"/>
+                <field name="postal_code" type="VARCHAR(10)"/>
+                <field name="contact_id" type="BIGINT UNSIGNED" foreign-key="contacts.id"/>
+                <field name="created_at" type="TIMESTAMP"/>
+                <field name="updated_at" type="TIMESTAMP"/>
+            </table>
+        </database-schema>
+    </service>
+</api-documentation>
